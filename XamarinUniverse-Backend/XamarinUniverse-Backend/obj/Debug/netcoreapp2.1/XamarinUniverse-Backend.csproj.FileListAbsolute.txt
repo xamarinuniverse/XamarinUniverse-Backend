@@ -1,0 +1,3 @@
+W:\Community\Repos\XU\XamarinUniverse-Backend\XamarinUniverse-Backend\XamarinUniverse-Backend\obj\Debug\netcoreapp2.1\XamarinUniverse-Backend.csproj.CoreCompileInputs.cache
+W:\Community\Repos\XU\XamarinUniverse-Backend\XamarinUniverse-Backend\XamarinUniverse-Backend\obj\Debug\netcoreapp2.1\XamarinUniverse-Backend.AssemblyInfoInputs.cache
+W:\Community\Repos\XU\XamarinUniverse-Backend\XamarinUniverse-Backend\XamarinUniverse-Backend\obj\Debug\netcoreapp2.1\XamarinUniverse-Backend.AssemblyInfo.cs

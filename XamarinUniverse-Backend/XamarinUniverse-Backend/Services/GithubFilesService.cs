@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -15,20 +16,26 @@ namespace XamarinUniverse_Backend.Services
     {
         
         public async Task<string> RepoMdToHtml(string owner, string repo, string path)
+            => await RepoMdToHtml(await GetFileFromGithub(owner, repo, path));
+
+        public Task<string> RepoMdToHtml(GithubResponse file)
         {
-            var file = await GetFileFromGithub(owner, repo, path);
-            if (file.Name.Split(".").LastOrDefault().ToLower()!="md")
+            if (!file.IsMd)
             {
-                throw new NotMdException();
+                return null;
             }
-            var md = FileToString(file);
-            return Markdown.ToHtml(md);
+            var md = file.StringValue;
+            return Task.FromResult(Markdown.ToHtml(md));
         }
         
         public async Task<GithubResponse> GetFileFromGithub(string owner, string repo, string path)
         {
             var response = await GetGithubContent(owner, repo, path);
-            return JsonConvert.DeserializeObject<GithubResponse>(await response.Content.ReadAsStringAsync());
+            return response.IsSuccessStatusCode ? JsonConvert.DeserializeObject<GithubResponse>(await response.Content.ReadAsStringAsync()) : null;
+        }
+        public Task<MemoryStream> RepoFileStream(GithubResponse file)
+        {
+            return Task.FromResult(new MemoryStream(file.ByteArray));
         }
         private Task<HttpResponseMessage> GetGithubContent(string owner, string repo, string path)
         {
@@ -36,11 +43,7 @@ namespace XamarinUniverse_Backend.Services
             client.DefaultRequestHeaders.Add("User-Agent", "request");
             return client.GetAsync($"https://api.github.com/repos/{owner}/{repo}/contents/{path}");
         }
-        private string FileToString(GithubResponse response)
-        {
-            byte[] bytesContent = Convert.FromBase64CharArray(response.Content.ToCharArray(), 0, response.Content.Length);
-            var result = Encoding.UTF8.GetString(bytesContent);
-            return result;
-        }
+
+        
     }
 }

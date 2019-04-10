@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using XamarinUniverse_Backend.Services;
 
 namespace XamarinUniverse_Backend
 {
@@ -26,6 +27,7 @@ namespace XamarinUniverse_Backend
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddScoped<IGithubFilesService, GithubFilesService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

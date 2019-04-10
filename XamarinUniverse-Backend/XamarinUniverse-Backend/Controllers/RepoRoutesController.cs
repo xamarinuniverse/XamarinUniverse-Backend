@@ -19,7 +19,9 @@ namespace XamarinUniverse_Backend.Controllers
         {
             _ghService = ghService;
         }
-        // GET api/values/5
+
+        // Github files prototype.
+        // To be refactor
         [HttpGet("{owner}/{repo}/{*path}")]
         public async Task<IActionResult> Get(string owner, string repo, string path)
         {
@@ -30,7 +32,6 @@ namespace XamarinUniverse_Backend.Controllers
             }
             if (file.IsMd)
             {
-                
                 return File(Encoding.UTF8.GetBytes($"<!doctype html><html lang=\"en\"></head><body>{await _ghService.RepoMdToHtml(file)}</body></html>"), "text/html");
             }
 

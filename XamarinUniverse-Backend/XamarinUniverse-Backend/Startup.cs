@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -26,8 +27,12 @@ namespace XamarinUniverse_Backend
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddAutoMapper();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddScoped<IGithubFilesService, GithubFilesService>();
+            services.AddScoped<IPlanetXamarinService, PlanetXamarinService>();
+            services.AddAutoMapper(map => { map.AddProfile<AppMappingProfile>(); });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

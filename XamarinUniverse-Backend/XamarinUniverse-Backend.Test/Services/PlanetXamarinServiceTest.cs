@@ -1,38 +1,45 @@
-﻿using Microsoft.SyndicationFeed;
-using Microsoft.SyndicationFeed.Rss;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Xml;
+﻿using AutoMapper;
+using System.Linq;
 using XamarinUniverse_Backend.Services;
+using XamarinUniverse_Backend.Test.TestUtils;
 using Xunit;
 
 namespace XamarinUniverse_Backend.Test.Services
 {
     public class PlanetXamarinServiceTest
     {
-        [Fact]
-        public void GetAllFeedsTest()
+        private IMapper mockMapper => new MapperConfiguration(cfg =>
         {
-            var all = new PlanetXamarinService().GetAllFeeds();
+            cfg.AddProfile(new AppMappingProfile());
+        }).CreateMapper();
+
+        [Fact]
+        public async void GetAllFeedsTest()
+        {
+            
+            var all = await new PlanetXamarinService(mockMapper).GetAllFeeds();
+            CommonAssert.AssertCleanAllDescription(all);
         }
 
         [Fact]
-        public void GetFeedsByCategoryTest()
+        public async void GetFeedsByCategoryTest()
         {
-            var all = new PlanetXamarinService().GetFeedsByCategory("MVP2019");
+            var all = await new PlanetXamarinService(mockMapper).GetFeedsByCategory("Xamarin");
+            CommonAssert.AssertCleanAllDescription(all);
         }
 
         [Fact]
-        public void GetFeedsByOrderTest()
+        public async void GetFeedsByOrderTest()
         {
-            var all = new PlanetXamarinService().GetFeedsByOrder(1);
+            var once = await new PlanetXamarinService(mockMapper).GetFeedsByOrder(1);
+            CommonAssert.AssertNotHtmlText(once.CleanDescription);
         }
 
         [Fact]
-        public void GetFeedsByCategoryOrderTest()
+        public async void GetFeedsByCategoryOrderTest()
         {
-            var all = new PlanetXamarinService().GetFeedsByCategoryOrder(1, "MVP2019");
+            var once = await new PlanetXamarinService(mockMapper).GetFeedsByCategoryOrder(1, "Xamarin");
+            CommonAssert.AssertNotHtmlText(once.CleanDescription);
         }
 
     }
